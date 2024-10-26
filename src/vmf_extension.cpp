@@ -12,7 +12,7 @@
 #include "duckdb/parser/parsed_data/create_type_info.hpp"
 #include "duckdb/parser/tableref/table_function_ref.hpp"
 #include "include/vmf_common.hpp"
-#include "vmf_functions.hpp"
+
 
 namespace duckdb {
 
@@ -37,39 +37,43 @@ void VmfExtension::Load(DuckDB &db) {
 	auto vmf_type = LogicalType::VMF();
 	ExtensionUtil::RegisterType(db_instance, LogicalType::VMF_TYPE_NAME, std::move(vmf_type));
 
+    CastFunctionSet cs;
+    VMFFunctions::RegisterSimpleCastFunctions(cs);
+
+
     // VMF casts
 	VMFFunctions::RegisterSimpleCastFunctions(DBConfig::GetConfig(db_instance).GetCastFunctions());
-	VMFFunctions::RegisterVMFCreateCastFunctions(DBConfig::GetConfig(db_instance).GetCastFunctions());
-	VMFFunctions::RegisterVMFTransformCastFunctions(DBConfig::GetConfig(db_instance).GetCastFunctions());
-
-	// VMF scalar functions
-	for (auto &fun : VMFFunctions::GetScalarFunctions()) {
-		ExtensionUtil::RegisterFunction(db_instance, fun);
-	}
-
-	// VMF table functions
-	for (auto &fun : VMFFunctions::GetTableFunctions()) {
-		ExtensionUtil::RegisterFunction(db_instance, fun);
-	}
-
-	// VMF pragma functions
-	for (auto &fun : VMFFunctions::GetPragmaFunctions()) {
-		ExtensionUtil::RegisterFunction(db_instance, fun);
-	}
-
-	// VMF replacement scan
-	auto &config = DBConfig::GetConfig(*db.instance);
-	config.replacement_scans.emplace_back(VMFFunctions::ReadVMFReplacement);
-
-	// VMF copy function
-	auto copy_fun = VMFFunctions::GetVMFCopyFunction();
-	ExtensionUtil::RegisterFunction(db_instance, std::move(copy_fun));
-
-	// VMF macro's
-	for (idx_t index = 0; vmf_macros[index].name != nullptr; index++) {
-		auto info = DefaultFunctionGenerator::CreateInternalMacroInfo(vmf_macros[index]);
-		ExtensionUtil::RegisterFunction(db_instance, *info);
-	}
+	//VMFFunctions::RegisterVMFCreateCastFunctions(DBConfig::GetConfig(db_instance).GetCastFunctions());
+	//VMFFunctions::RegisterVMFTransformCastFunctions(DBConfig::GetConfig(db_instance).GetCastFunctions());
+//
+	//// VMF scalar functions
+	//for (auto &fun : VMFFunctions::GetScalarFunctions()) {
+	//	ExtensionUtil::RegisterFunction(db_instance, fun);
+	//}
+//
+	//// VMF table functions
+	//for (auto &fun : VMFFunctions::GetTableFunctions()) {
+	//	ExtensionUtil::RegisterFunction(db_instance, fun);
+	//}
+//
+	//// VMF pragma functions
+	//for (auto &fun : VMFFunctions::GetPragmaFunctions()) {
+	//	ExtensionUtil::RegisterFunction(db_instance, fun);
+	//}
+//
+	//// VMF replacement scan
+	//auto &config = DBConfig::GetConfig(*db.instance);
+	//config.replacement_scans.emplace_back(VMFFunctions::ReadVMFReplacement);
+//
+	//// VMF copy function
+	//auto copy_fun = VMFFunctions::GetVMFCopyFunction();
+	//ExtensionUtil::RegisterFunction(db_instance, std::move(copy_fun));
+//
+	//// VMF macro's
+	//for (idx_t index = 0; vmf_macros[index].name != nullptr; index++) {
+	//	auto info = DefaultFunctionGenerator::CreateInternalMacroInfo(vmf_macros[index]);
+	//	ExtensionUtil::RegisterFunction(db_instance, *info);
+	//}
 }
 
 std::string VmfExtension::Name() {

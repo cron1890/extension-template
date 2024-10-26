@@ -18,7 +18,8 @@ add_library_unity(
   vmf_serialize_plan.cpp
   vmf_serialize_sql.cpp
   read_vmf.cpp
-  read_vmf_objects.cpp)
+  read_vmf_objects.cpp
+  include/vmf_functions.hpp)
 set(ALL_OBJECT_FILES
     ${ALL_OBJECT_FILES} $<TARGET_OBJECTS:duckdb_vmf_functions>
     PARENT_SCOPE)

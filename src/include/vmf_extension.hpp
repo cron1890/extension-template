@@ -9,6 +9,7 @@
 #pragma once
 
 #include "duckdb.hpp"
+#include "vmf_functions.hpp"
 
 namespace duckdb {
 

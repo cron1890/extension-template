@@ -37,7 +37,7 @@ set(VMF_EXTENSION_FILES
 build_static_extension(vmf ${VMF_EXTENSION_FILES})
 set(PARAMETERS "-warnings")
 build_loadable_extension(vmf ${PARAMETERS} ${VMF_EXTENSION_FILES})
-target_link_libraries(vmf_loadable_extension duckdb_yyjson)
+target_link_libraries(vmf_loadable_extension duckdb_yyjson duckdb_vmf_functions)
 
 install(
   TARGETS vmf_extension
